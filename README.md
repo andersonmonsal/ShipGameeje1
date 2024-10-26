@@ -74,8 +74,11 @@ Navega al directorio del proyecto:
 cd ruta/al/directorio/proyecto
 ejemplo: En mi caso: Cd Users\yonatan\Desktop\lenguaje dos\ShipGameeje1
 Una vez en la ruta del archivo debes usar el siguiente comando: 
+
+
                                      python src/view/main.py
-Nota: Debes tener python instalado, en mi caso yo lo hago desde anancoda promt
+
+
 
 
 ## Pruebas
