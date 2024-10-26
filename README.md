@@ -73,7 +73,7 @@ Ejecutar el Programa
 Navega al directorio del proyecto:
 cd ruta/al/directorio/proyecto
 ejemplo: En mi caso: Cd Users\yonatan\Desktop\lenguaje dos\ShipGameeje1
-Una vez en la ruta del archivo debes usar el siguiente comando: 
+una vez en la ruta del archivo debes usar el siguiente comando: 
 
 
                                      python src/view/main.py
@@ -85,7 +85,8 @@ Una vez en la ruta del archivo debes usar el siguiente comando:
 El proyecto incluye un conjunto de pruebas unitarias para verificar la funcionalidad del modelo de jugadores.
 
 Para ejecutar las pruebas, corre el siguiente comando:
-noata: Debes estar ubicado en el lugar donde descargaste el programa
+noata: Debes estar ubicado en el lugar donde descargaste el programa y depues ejecutar el siguiente codigo
+
 
                                      python test/test_player.py
 
