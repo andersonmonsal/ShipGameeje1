@@ -1,4 +1,4 @@
-
+#src/view/main.py
 import sys
 sys.path.append("src")
 
