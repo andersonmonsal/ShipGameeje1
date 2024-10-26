@@ -1,14 +1,8 @@
-#src/model/naval_warfare.py
-import sys
-sys.path.append("src")
-
-from controller.db_connection import get_connection
-from model.player_model import Jugador
+# src/model/naval_warfare.py
 
 def create_matrix():
     w, h = 5, 5
-    matrix = [[0 for _ in range(w)] for _ in range(h)]
-    return matrix
+    return [[0 for _ in range(w)] for _ in range(h)]
 
 def convert_location(position: str) -> tuple:
     letras = {"A": 0, "B": 1, "C": 2, "D": 3, "E": 4}

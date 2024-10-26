@@ -1,8 +1,9 @@
-#src/view/main.py
+# src/view/main.py
 import sys
 sys.path.append("src")
 
 from controller.game_controller import GameController
+from model.naval_warfare import convert_location
 
 def imprimir_tablero(matrix):
     letras = "ABCDE"
@@ -50,15 +51,16 @@ def main():
     while True:
         opcion = mostrar_menu()
         if opcion == '1':
-            # aqui se crea el  jugador
-            nombre = input("Ingrese el nombre del jugador: ")
+            nombre = input("Ingrese el nombre del jugador: ").strip()
+            if not nombre:
+                print("El nombre no puede estar vacío.")
+                continue
             jugador = controller.crear_jugador(nombre)
             if jugador:
                 print(f"Jugador '{jugador.nombre}' creado con ID {jugador.id}")
             else:
                 print("Error al crear el jugador.")
         elif opcion == '2':
-            # para ver jugadores
             jugadores = controller.obtener_todos_los_jugadores()
             if jugadores:
                 print("\nLista de Jugadores:")
@@ -67,10 +69,12 @@ def main():
             else:
                 print("No hay jugadores registrados.")
         elif opcion == '3':
-            # para actualizar jugador
             try:
                 jugador_id = int(input("Ingrese el ID del jugador a actualizar: "))
-                nuevo_nombre = input("Ingrese el nuevo nombre del jugador: ")
+                nuevo_nombre = input("Ingrese el nuevo nombre del jugador: ").strip()
+                if not nuevo_nombre:
+                    print("El nombre no puede estar vacío.")
+                    continue
                 resultado = controller.actualizar_jugador(jugador_id, nuevo_nombre)
                 if resultado:
                     print("Jugador actualizado exitosamente.")
@@ -79,7 +83,6 @@ def main():
             except ValueError:
                 print("ID inválido. Debe ser un número entero.")
         elif opcion == '4':
-            #  para eliminar jugador
             try:
                 jugador_id = int(input("Ingrese el ID del jugador a eliminar: "))
                 resultado = controller.eliminar_jugador(jugador_id)
@@ -90,7 +93,6 @@ def main():
             except ValueError:
                 print("ID inválido. Debe ser un número entero.")
         elif opcion == '5':
-            #  para iniciar el juego
             try:
                 jugador1_id = int(input("Ingrese el ID del jugador 1: "))
                 jugador2_id = int(input("Ingrese el ID del jugador 2: "))
@@ -100,7 +102,13 @@ def main():
                         print(f"\nJugador {controller.juego.currentplayer.name}, coloca tus barcos.")
                         for _ in range(3):  # Cada jugador coloca 3 barcos
                             imprimir_tablero(controller.juego.currentplayer.board)
-                            position = input("Ingrese una posición para su barco (ej. A1): ")
+                            while True:
+                                position = input("Ingrese una posición para su barco (ej. A1): ").strip()
+                                try:
+                                    convert_location(position)
+                                    break
+                                except ValueError as e:
+                                    print(e)
                             if controller.colocar_barco(position):
                                 print("¡Barco colocado!")
                             else:
@@ -111,7 +119,13 @@ def main():
                     while not controller.verificar_fin_juego():
                         print(f"\nTurno del jugador {controller.juego.currentplayer.name}")
                         imprimir_tablero_oculto(controller.juego.currentplayer.board_attack)
-                        position = input("Ingrese una posición para atacar (ej. A1): ")
+                        while True:
+                            position = input("Ingrese una posición para atacar (ej. A1): ").strip()
+                            try:
+                                convert_location(position)
+                                break
+                            except ValueError as e:
+                                print(e)
                         if controller.realizar_disparo(position):
                             print("¡Has acertado un barco!")
                         else:
@@ -136,4 +150,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -8,7 +8,6 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '.
 import psycopg2
 import config
 
-
 def get_connection():
     try:
         connection = psycopg2.connect(
@@ -22,3 +21,4 @@ def get_connection():
     except Exception as e:
         print(f"Error al conectar a la base de datos: {e}")
         return None
+

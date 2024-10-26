@@ -1,75 +1,61 @@
-# Archivo: test/test_jugador.py
+# test/test_player.py
 
 import sys
 sys.path.append("src")
 
 import unittest
-from model.player_model import Jugador
-from controller.db_connection import get_connection
+from controller.game_controller import GameController
 
 class TestJugadorModelo(unittest.TestCase):
     def setUp(self):
-        # aqui se limpia la base de datos
-        self.limpiar_base_de_datos()
-
-    def limpiar_base_de_datos(self):
-        connection = get_connection()
-        if connection:
-            cursor = connection.cursor()
-            try:
-                
-                cursor.execute("DELETE FROM tableros;")
-           
-                cursor.execute("DELETE FROM juegos;")
-                cursor.execute("DELETE FROM jugadores;")
-                connection.commit()
-            except Exception as e:
-                print(f"Error al limpiar la base de datos: {e}")
-            finally:
-                cursor.close()
-                connection.close()
+        self.controller = GameController()
+        self.controller.limpiar_base_de_datos()
 
     def test_crear_jugador_exitoso(self):
-        jugador = Jugador(nombre="JugadorPrueba")
-        jugador_creado = jugador.crear()
-        self.assertIsNotNone(jugador_creado)
-        self.assertIsNotNone(jugador_creado.id)
-        self.assertEqual(jugador_creado.nombre, "JugadorPrueba")
+        jugador = self.controller.crear_jugador("JugadorPrueba")
+        self.assertIsNotNone(jugador)
+        self.assertIsNotNone(jugador.id)
+        self.assertEqual(jugador.nombre, "JugadorPrueba")
 
     def test_crear_jugador_error(self):
-        jugador = Jugador(nombre="")
-        jugador_creado = jugador.crear()
-        self.assertIsNone(jugador_creado)
+        jugador = self.controller.crear_jugador("")
+        self.assertIsNone(jugador)
 
     def test_actualizar_jugador_exitoso(self):
-        jugador = Jugador(nombre="JugadorActualizar")
-        jugador.crear()
-        resultado = jugador.actualizar("NuevoNombre")
+        jugador = self.controller.crear_jugador("JugadorActualizar")
+        resultado = self.controller.actualizar_jugador(jugador.id, "NuevoNombre")
         self.assertTrue(resultado)
-        jugador_actualizado = Jugador.obtener_por_id(jugador.id)
+        jugador_actualizado = self.controller.obtener_jugador(jugador.id)
         self.assertEqual(jugador_actualizado.nombre, "NuevoNombre")
 
     def test_actualizar_jugador_error(self):
-        jugador = Jugador(id=9999)
-        resultado = jugador.actualizar("NombreInexistente")
+        resultado = self.controller.actualizar_jugador(9999, "NombreInexistente")
         self.assertFalse(resultado)
 
     def test_eliminar_jugador_exitoso(self):
-        jugador = Jugador(nombre="JugadorEliminar")
-        jugador.crear()
-        resultado = jugador.eliminar()
+        jugador = self.controller.crear_jugador("JugadorEliminar")
+        resultado = self.controller.eliminar_jugador(jugador.id)
         self.assertTrue(resultado)
-        jugador_eliminado = Jugador.obtener_por_id(jugador.id)
+        jugador_eliminado = self.controller.obtener_jugador(jugador.id)
         self.assertIsNone(jugador_eliminado)
 
     def test_eliminar_jugador_error(self):
-        jugador = Jugador(id=9999)
-        resultado = jugador.eliminar()
+        resultado = self.controller.eliminar_jugador(9999)
         self.assertFalse(resultado)
 
     def test_obtener_jugador_no_existente(self):
-        jugador = Jugador.obtener_por_id(9999)
+        jugador = self.controller.obtener_jugador(9999)
         self.assertIsNone(jugador)
+
+    def test_obtener_todos_los_jugadores(self):
+        # Crear algunos jugadores
+        self.controller.crear_jugador("Jugador1")
+        self.controller.crear_jugador("Jugador2")
+        jugadores = self.controller.obtener_todos_los_jugadores()
+        self.assertEqual(len(jugadores), 2)
+        nombres = [jugador.nombre for jugador in jugadores]
+        self.assertIn("Jugador1", nombres)
+        self.assertIn("Jugador2", nombres)
 
 if __name__ == '__main__':
     unittest.main()

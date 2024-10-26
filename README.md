@@ -1,3 +1,7 @@
+##
+AUTOR1: Yonatan Calimeño
+AUTOR1: Santiago
+
 # NAVAL WARFAME GAME
 
 Este proyecto es un sistema de batallas navales multijugador con manejo de jugadores, tableros y lógica de juego. La aplicación permite crear jugadores, iniciar juegos entre ellos y realizar las acciones típicas del juego de batallas navales, como posicionar barcos y disparar a las posiciones del tablero enemigo.
@@ -9,20 +13,45 @@ PostgreSQL (para gestionar la base de datos)
 ## Estructura del proyecto
 
 
-│
+proyecto/
 ├── src/
-│   ├── controller/
-│   │   └── game_controller.py , db_connection.py   # Controlador principal del juego, conexion bases
 │   ├── model/
-│   │   ├── player_model.py             # Modelo de Jugador
-│   │   └── naval_warfare.py       # Lógica principal del juego
-│   ├──
-│   └── 
+│   │   ├── naval_warfare.py
+│   │   └── player_model.py
+│   ├── controller/
+│   │   ├── game_controller.py
+│   │   └── db_connection.py
+│   └── view/
+│       └── main.py
 ├── test/
-│   └── test_player.py            # Pruebas unitarias para el modelo Jugador
-│--- config.py                  # Archivo de configuración de la base de datos
-│
-└── README.md        
+│   └── test_player.py
+├── sql/
+│   └── crear_tablas.sql
+├── config.py
+└── README.md
+## Descripción de Carpetas y Archivos
+src/: Contiene el código fuente de la aplicación.
+
+model/: Define las clases y la lógica del dominio del problema.
+
+naval_warfare.py: Implementa las clases Player y NavalWarfare, que contienen la lógica del juego.
+
+player_model.py: Define la clase Jugador, representando a un jugador en el juego.
+
+controller/: Maneja la lógica de negocio y la comunicación con la base de datos.
+
+game_controller.py: Implementa la clase GameController, que sirve como intermediario entre la vista y el modelo, y maneja las operaciones de base de datos.
+
+db_connection.py: Proporciona la función get_connection() para conectarse a la base de datos.
+view/: Maneja la interacción con el usuario.
+
+main.py: Es el punto de entrada de la aplicación y contiene la interfaz de línea de comandos.
+test/: Contiene las pruebas unitarias.
+
+test_player.py: Pruebas para las funcionalidades relacionadas con los jugadores.
+sql/:
+crear_tablas.sql: Script SQL para crear las tablas necesarias en la base de datos.
+config.py: Archivo de configuración que contiene las credenciales y parámetros para la conexión a la base de datos.
 
 ## Instalación de dependencias
 Instalar las librerías necesarias:
@@ -37,38 +66,23 @@ jugadores: Almacena la información básica de los jugadores.
 juegos: Gestiona las partidas entre dos jugadores.
 tableros: Representa el estado de cada tablero de un jugador en un juego.
 
-## Controlador del juego
-El archivo game_controller.py maneja las interacciones principales con los jugadores y la lógica de juego.
-
-Funciones principales:
-
-Crear jugador: Añade un nuevo jugador a la base de datos.
-Actualizar jugador: Modifica el nombre de un jugador existente.
-Eliminar jugador: Borra un jugador de la base de datos.
-Iniciar juego: Inicia un juego entre dos jugadores.
-Colocar barco: Posiciona un barco en el tablero de un jugador.
-Realizar disparo: Ataca una posición del tablero del oponente.
-Verificar fin del juego: Comprueba si el juego ha terminado.
-Obtener ganador: Devuelve el jugador que ganó la partida.
 
 ## Ejecución
-Iniciar el juego:
-Ejecuta el archivo main.py para comenzar el programa de consola:
+Ejecutar el Programa
 
-                                        python src/main.py
-El menú principal ofrece las siguientes opciones:
+Navega al directorio del proyecto:
+cd ruta/al/directorio/proyecto
+ejemplo: En mi caso: Cd Users\yonatan\Desktop\lenguaje dos\ShipGameeje1
+Una vez en la ruta del archivo debes usar el siguiente comando: 
+                                     python src/view/main.py
+Nota: Debes tener python instalado, en mi caso yo lo hago desde anancoda promt
 
-Crear jugador
-Ver jugadores
-Actualizar jugador
-Eliminar jugador
-Iniciar juego
-Salir
 
 ## Pruebas
 El proyecto incluye un conjunto de pruebas unitarias para verificar la funcionalidad del modelo de jugadores.
 
 Para ejecutar las pruebas, corre el siguiente comando:
+noata: Debes estar ubicado en el lugar donde descargaste el programa
 
-                                     python test_player.py
+                                     python test/test_player.py
 
