@@ -1,6 +1,6 @@
 ##
 AUTOR1: Yonatan Calimeño
-AUTOR1: Santiago
+AUTOR2: Santiago
 
 # NAVAL WARFAME GAME
 
