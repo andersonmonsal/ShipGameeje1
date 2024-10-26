@@ -1,4 +1,5 @@
 # src/view/main.py
+
 import sys
 sys.path.append("src")
 
@@ -138,6 +139,12 @@ def main():
                     ganador = controller.obtener_ganador()
                     if ganador:
                         print(f"\n¡El jugador {ganador.name} ha ganado el juego!")
+                        # Actualizar el juego en la base de datos
+                        controller.actualizar_juego(controller.juego_id, 'finalizado', ganador.id)
+                    else:
+                        print("\nEl juego ha terminado en empate.")
+                        # actualizar el estado del juego sin ganador
+                        controller.actualizar_juego(controller.juego_id, 'finalizado')
                 else:
                     print("No se pudo iniciar el juego.")
             except ValueError:

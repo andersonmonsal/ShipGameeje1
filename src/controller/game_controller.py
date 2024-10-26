@@ -7,6 +7,7 @@ from controller.db_connection import get_connection
 class GameController:
     def __init__(self):
         self.juego = None
+        self.juego_id = None 
 
     def crear_jugador(self, nombre):
         jugador = Jugador(nombre=nombre)
@@ -26,6 +27,7 @@ class GameController:
                 )
                 jugador.id = cursor.fetchone()[0]
                 connection.commit()
+                print(f"Jugador creado con ID: {jugador.id}")
                 return jugador
             except Exception as e:
                 print(f"Error al crear jugador: {e}")
@@ -34,6 +36,8 @@ class GameController:
             finally:
                 cursor.close()
                 connection.close()
+        else:
+            print("No se pudo establecer conexión con la base de datos.")
         return None
 
     def obtener_jugador(self, jugador_id):
@@ -56,6 +60,8 @@ class GameController:
             finally:
                 cursor.close()
                 connection.close()
+        else:
+            print("No se pudo establecer conexión con la base de datos.")
         return None
 
     def actualizar_jugador(self, jugador_id, nuevo_nombre):
@@ -78,6 +84,7 @@ class GameController:
                     print("Jugador no encontrado.")
                     return False
                 connection.commit()
+                print(f"Jugador con ID {jugador.id} actualizado.")
                 return True
             except Exception as e:
                 print(f"Error al actualizar jugador: {e}")
@@ -86,6 +93,8 @@ class GameController:
             finally:
                 cursor.close()
                 connection.close()
+        else:
+            print("No se pudo establecer conexión con la base de datos.")
         return False
 
     def eliminar_jugador(self, jugador_id):
@@ -101,6 +110,7 @@ class GameController:
                     print("Jugador no encontrado.")
                     return False
                 connection.commit()
+                print(f"Jugador con ID {jugador_id} eliminado.")
                 return True
             except Exception as e:
                 print(f"Error al eliminar jugador: {e}")
@@ -109,6 +119,8 @@ class GameController:
             finally:
                 cursor.close()
                 connection.close()
+        else:
+            print("No se pudo establecer conexión con la base de datos.")
         return False
 
     def obtener_todos_los_jugadores(self):
@@ -128,6 +140,8 @@ class GameController:
             finally:
                 cursor.close()
                 connection.close()
+        else:
+            print("No se pudo establecer conexión con la base de datos.")
         return jugadores
 
     def iniciar_juego(self, jugador1_id, jugador2_id):
@@ -137,7 +151,13 @@ class GameController:
             player1 = Player(jugador1.id, jugador1.nombre)
             player2 = Player(jugador2.id, jugador2.nombre)
             self.juego = NavalWarfare(player1, player2)
-            return True
+            # Crear el juego en la base de datos
+            self.juego_id = self.crear_juego(jugador1_id, jugador2_id)
+            if self.juego_id:
+                return True
+            else:
+                print("No se pudo crear el juego en la base de datos.")
+                return False
         else:
             print("Uno o ambos jugadores no existen.")
             return False
@@ -166,8 +186,61 @@ class GameController:
 
     def obtener_ganador(self):
         return self.juego.get_winner()
+
+    def crear_juego(self, jugador1_id, jugador2_id):
+        """Crea un nuevo juego en la base de datos y retorna el ID del juego."""
+        connection = get_connection()
+        if connection:
+            cursor = connection.cursor()
+            try:
+                cursor.execute(
+                    "INSERT INTO juegos (jugador1_id, jugador2_id, estado) VALUES (%s, %s, %s) RETURNING id;",
+                    (jugador1_id, jugador2_id, 'en progreso')
+                )
+                juego_id = cursor.fetchone()[0]
+                connection.commit()
+                print(f"Juego creado con ID: {juego_id}")
+                return juego_id
+            except Exception as e:
+                print(f"Error al crear juego: {e}")
+                connection.rollback()
+                return None
+            finally:
+                cursor.close()
+                connection.close()
+        else:
+            print("No se pudo establecer conexión con la base de datos.")
+            return None
+
+    def actualizar_juego(self, juego_id, estado, ganador_id=None):
+        """Actualiza el estado y el ganador del juego en la base de datos."""
+        connection = get_connection()
+        if connection:
+            cursor = connection.cursor()
+            try:
+                cursor.execute(
+                    "UPDATE juegos SET estado = %s, ganador_id = %s WHERE id = %s;",
+                    (estado, ganador_id, juego_id)
+                )
+                if cursor.rowcount == 0:
+                    print(f"No se encontró el juego con ID {juego_id}.")
+                    return False
+                connection.commit()
+                print(f"Juego con ID {juego_id} actualizado.")
+                return True
+            except Exception as e:
+                print(f"Error al actualizar juego: {e}")
+                connection.rollback()
+                return False
+            finally:
+                cursor.close()
+                connection.close()
+        else:
+            print("No se pudo establecer conexión con la base de datos.")
+            return False
+
+    # Método para limpiar la base de datos (solo para pruebas)
     def limpiar_base_de_datos(self):
-        """Limpia las tablas de la base de datos. Usar solo en pruebas."""
         connection = get_connection()
         if connection:
             cursor = connection.cursor()
@@ -176,8 +249,12 @@ class GameController:
                 cursor.execute("DELETE FROM juegos;")
                 cursor.execute("DELETE FROM jugadores;")
                 connection.commit()
+                print("Base de datos limpiada.")
             except Exception as e:
                 print(f"Error al limpiar la base de datos: {e}")
+                connection.rollback()
             finally:
                 cursor.close()
                 connection.close()
+        else:
+            print("No se pudo establecer conexión con la base de datos.")
