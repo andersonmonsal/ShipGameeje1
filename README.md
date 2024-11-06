@@ -1,6 +1,12 @@
-##
+## autores anteriores 
 AUTOR1: Yonatan Calimeño
 AUTOR2: Santiago
+
+## Autores  Actuales 
+Tomas Lopes
+Anderson Monsalve 
+
+
 
 # NAVAL WARFAME GAME
 
