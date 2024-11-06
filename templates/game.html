@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naval Warfare - Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Naval Warfare</h1>
+        <nav class="container">
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('players') }}">Players</a></li>
+                <li><a href="{{ url_for('game') }}">Game</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="game-start">
+            <h2>Start a New Game</h2>
+            <form action="{{ url_for('start_game') }}" method="post">
+                <div class="player-select">
+                    <label for="player1">Player 1:</label>
+                    <select name="player1_id" id="player1" required>
+                        {% for player in players %}
+                            <option value="{{ player.id }}">{{ player.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="player-select">
+                    <label for="player2">Player 2:</label>
+                    <select name="player2_id" id="player2" required>
+                        {% for player in players %}
+                            <option value="{{ player.id }}">{{ player.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button type="submit">Start Game</button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="container">
+        <p>&copy; 2024 Naval Warfare. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
