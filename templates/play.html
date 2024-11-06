@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jugar - Batalla Naval</title>
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+    <h1>Batalla Naval</h1>
+    <h2>Turno del Jugador: {{ current_player.nombre }}</h2>
+
+    <div id="game-area">
+        <h3>Tablero de Ataque</h3>
+        <table id="board-attack">
+            {% for row in game.currentplayer.board_attack %}
+                <tr>
+                    {% for cell in row %}
+                        <td class="cell">
+                            {% if cell == 0 %}
+                                <span>.</span>
+                            {% elif cell == 1 %}
+                                <span>B</span>
+                            {% elif cell == 2 %}
+                                <span>X</span>
+                            {% else %}
+                                <span>A</span>
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+
+        <h3>Tablero de Defensa (oculto)</h3>
+        <table id="board">
+            {% for row in game.currentplayer.board %}
+                <tr>
+                    {% for cell in row %}
+                        <td class="cell">
+                            <span>{{ '.' if cell == 0 else 'B' }}</span>
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+
+        <h3>Realiza tu disparo</h3>
+        <form id="shoot-form" action="{{ url_for('shoot') }}" method="POST">
+            <label for="position">Posición (Ejemplo: A1):</label>
+            <input type="text" id="position" name="position" required>
+            <button type="submit">Disparar</button>
+        </form>
+    </div>
+
+    <button id="switch-turn" onclick="switchTurn()">Cambiar Turno</button>
+    <script>
+        // Control de cambio de turno
+        function switchTurn() {
+            fetch('/switch_turn', {
+                method: 'POST'
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      location.reload();
+                  }
+              });
+        }
+
+        // Muestra el ganador cuando el juego termine
+        function showGameOver(winner) {
+            document.getElementById('game-over').style.display = 'block';
+            document.getElementById('winner').innerText = "El ganador es: " + winner;
+        }
+
+        // Escucha el resultado de disparo
+        document.getElementById("shoot-form").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const position = document.getElementById('position').value;
+
+            fetch('/shoot', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `position=${position}`
+            }).then(response => response.json())
+              .then(data => {
+                  if (data.success) {
+                      alert(data.hit ? "¡Has acertado!" : "¡Has fallado!");
+                      if (data.game_over) {
+                          showGameOver(data.winner);
+                      }
+                  } else {
+                      alert("Error al disparar: " + data.message);
+                  }
+              });
+        });
+    </script>
+</body>
+</html>
