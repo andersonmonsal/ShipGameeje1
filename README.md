@@ -1,6 +1,10 @@
-##
+## Autores Anteriores 
 AUTOR1: Yonatan Calimeño
 AUTOR2: Santiago
+
+## Autores recientes 
+Tomas Lopez
+Anderson Monsalve 
 
 # NAVAL WARFAME GAME
 
@@ -56,7 +60,13 @@ config.py: Archivo de configuración que contiene las credenciales y parámetros
 ## Instalación de dependencias
 Instalar las librerías necesarias:
 
+
                                pip install psycopg2
+## web
+para que el proyecto web te pueda funcionar lo que debes hacer es instalar la siguiente extención 
+
+                               pip install Flask
+ 
 
 
 ## Base de datos
@@ -89,4 +99,13 @@ noata: Debes estar ubicado en el lugar donde descargaste el programa y depues ej
 
 
                                      python test/test_player.py
+
+
+## web
+En la caroeta templates encuestras todo lo del html
+para ejecutar este archivo debes entrar a el archivo app.py y aca podras ejecutar esto para que se de el funcionamiento web donde este te brindara una url donde podras ejecutar la web
+
+                                   
+
+
 
