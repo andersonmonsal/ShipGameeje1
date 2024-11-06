@@ -103,7 +103,7 @@ noata: Debes estar ubicado en el lugar donde descargaste el programa y depues ej
 
 ## web
 En la caroeta templates encuestras todo lo del html
-para ejecutar este archivo debes entrar a el archivo app.py y aca podras ejecutar esto para que se de el funcionamiento web donde este te brindara una url donde podras ejecutar la web
+para ejecutar este archivo debes entrar a el archivo "" app.py "" y aca podras ejecutar esto para que se de el funcionamiento web donde este te brindara una url donde podras ejecutar la web
 
                                    
 
