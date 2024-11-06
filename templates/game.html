@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naval Warfare - Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Naval Warfare</h1>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('players') }}">Players</a></li>
+                    <li><a href="{{ url_for('game') }}">Game</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="game-start">
+                <h2>Start a New Game</h2>
+                <form action="{{ url_for('game') }}" method="post">
+                    <div class="player-select">
+                        <label for="player1_id">Player 1:</label>
+                        <select id="player1_id" name="player1_id">
+                            <option value="">Select Player 1</option>
+                            {% for player in players %}
+                            <option value="{{ player.id }}">{{ player.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="player-select">
+                        <label for="player2_id">Player 2:</label>
+                        <select id="player2_id" name="player2_id">
+                            <option value="">Select Player 2</option>
+                            {% for player in players %}
+                            <option value="{{ player.id }}">{{ player.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn">Start Game</button>
+                </form>
+            </section>
+
+            <!-- Section for registering a new player -->
+            <section class="register-player">
+                <h2>Register as a New Player</h2>
+                <form action="{{ url_for('register') }}" method="post">
+                    <div class="form-group">
+                        <label for="name">Player Name:</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email (optional):</label>
+                        <input type="email" id="email" name="email">
+                    </div>
+
+                    <button type="submit" class="btn">Register</button>
+                </form>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Naval Warfare. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

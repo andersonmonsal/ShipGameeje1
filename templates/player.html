@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Naval Warfare - Players</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Naval Warfare - Players</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('players') }}">Players</a></li>
+                <li><a href="{{ url_for('game') }}">Game</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>List of Players</h2>
+            <ul>
+                {% for player in players %}
+                <li>ID: {{ player.id }} - Name: {{ player.name }}</li>
+                {% endfor %}
+            </ul>
+            <h2>Create a New Player</h2>
+            <form action="{{ url_for('create_player') }}" method="post">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <button type="submit">Create</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Naval Warfare</p>
+    </footer>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
