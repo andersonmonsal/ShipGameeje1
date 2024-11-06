@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naval Warfare - Game</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Naval Warfare - Game</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('players') }}">Players</a></li>
+                <li><a href="{{ url_for('game') }}">Game</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>Current Game</h2>
+            <div class="game-info">
+                <p>Player 1: {{ game.player1.name }}</p>
+                <p>Player 2: {{ game.player2.name }}</p>
+                <p>Current Player: {{ current_player.name }}</p>
+            </div>
+
+            <div id="game-board"></div>
+
+            <form id="attack-form">
+                <button type="submit">Attack</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Naval Warfare</p>
+    </footer>
+</body>
+</html>
