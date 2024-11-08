@@ -74,8 +74,11 @@ para que el proyecto web te pueda funcionar lo que debes hacer es instalar la si
 El proyecto utiliza PostgreSQL como base de datos. El esquema de la base de datos incluye las siguientes tablas:
 
 -jugadores: Almacena la información básica de los jugadores.
+
 -juegos: Gestiona las partidas entre dos jugadores.
+
 -tableros: Representa el estado de cada tablero de un jugador en un juego.
+
 # coloca tu base de datos en config.py
 
 
