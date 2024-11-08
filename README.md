@@ -73,9 +73,10 @@ para que el proyecto web te pueda funcionar lo que debes hacer es instalar la si
 ## Base de datos
 El proyecto utiliza PostgreSQL como base de datos. El esquema de la base de datos incluye las siguientes tablas:
 
-jugadores: Almacena la información básica de los jugadores.
-juegos: Gestiona las partidas entre dos jugadores.
-tableros: Representa el estado de cada tablero de un jugador en un juego.
+-jugadores: Almacena la información básica de los jugadores.
+-juegos: Gestiona las partidas entre dos jugadores.
+-tableros: Representa el estado de cada tablero de un jugador en un juego.
+# coloca tu base de datos en config.py
 
 
 ## Ejecución
@@ -105,6 +106,7 @@ noata: Debes estar ubicado en el lugar donde descargaste el programa y depues ej
 ## web
 En la caroeta templates encuestras todo lo del html
 para ejecutar este archivo debes entrar a el archivo "" app.py "" y aca podras ejecutar esto para que se de el funcionamiento web donde este te brindara una url donde podras ejecutar la web
+
 
                                    
 
