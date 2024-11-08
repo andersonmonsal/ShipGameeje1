@@ -115,6 +115,7 @@
         <div class="player-info" id="playerInfo">
             <p><strong>Jugador 1:</strong> <span id="displayPlayer1Name">-</span></p>
             <p><strong>Jugador 2:</strong> <span id="displayPlayer2Name">-</span></p>
+            <p><strong>Turno de:</strong> <span id="currentPlayer">-</span></p>
         </div>
         
         <div class="grid" id="playerBoard"></div>
@@ -126,7 +127,7 @@
     </div>
 
     <script>
-        let player1Name, player2Name, gameOver = false;
+        let player1Name, player2Name, currentPlayer = 1, gameOver = false;
 
         // Función para generar el tablero del jugador
         function generarTablero() {
@@ -157,6 +158,7 @@
             document.getElementById("playerSelection").style.display = "none";
             document.getElementById("gameStatus").textContent = "Juego en progreso...";
             document.getElementById("restartButton").style.display = "inline-block";  // Mostrar el botón de reiniciar
+            document.getElementById("currentPlayer").textContent = player1Name; // Iniciar con el jugador 1
             generarTablero();
         }
 
@@ -165,29 +167,37 @@
             const cells = document.querySelectorAll(".cell");
             const cell = cells[cellIndex];
 
-            // Aquí deberías integrar la lógica de la aplicación para determinar si la celda es un acierto o no.
-            // Esta es solo una simulación.
-            const hit = Math.random() > 0.7; // 30% de probabilidad de que sea un "hit"
+            // Determinar el jugador actual
+            let playerName = currentPlayer === 1 ? player1Name : player2Name;
 
+            // Lógica para disparo
+            const hit = Math.random() > 0.7; // 30% de probabilidad de que sea un "hit"
             if (hit) {
                 cell.classList.add("hit");
-                document.getElementById("gameStatus").textContent = `¡Acierto, ${player1Name}!`;
+                document.getElementById("gameStatus").textContent = `¡Acierto, ${playerName}!`;
             } else {
                 cell.classList.add("sunk");
-                document.getElementById("gameStatus").textContent = `¡Fallaste, ${player1Name}!`;
+                document.getElementById("gameStatus").textContent = `¡Fallaste, ${playerName}!`;
             }
+
+            // Cambiar turno
+            currentPlayer = currentPlayer === 1 ? 2 : 1;
+            playerName = currentPlayer === 1 ? player1Name : player2Name;
+            document.getElementById("currentPlayer").textContent = playerName;
 
             // Simulación de fin del juego
             if (Math.random() > 0.95) {
                 gameOver = true;
-                document.getElementById("gameStatus").textContent = `Game Over! ${player1Name} ha ganado.`;
+                document.getElementById("gameStatus").textContent = `Game Over! ${playerName} ha ganado.`;
             }
         }
 
         // Función para reiniciar el juego
         function reiniciarJuego() {
             gameOver = false;
+            currentPlayer = 1; // Reiniciar al jugador 1
             document.getElementById("gameStatus").textContent = "Juego en progreso...";
+            document.getElementById("currentPlayer").textContent = player1Name; // Empezar con el jugador 1
             generarTablero();
         }
 
