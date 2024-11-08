@@ -120,6 +120,9 @@
         <div class="grid" id="playerBoard"></div>
 
         <div id="gameStatus" class="status"></div>
+
+        <!-- Botón para reiniciar el juego -->
+        <button class="button" id="restartButton" style="display:none;">Reiniciar Juego</button>
     </div>
 
     <script>
@@ -153,6 +156,7 @@
             document.getElementById("displayPlayer2Name").textContent = player2Name;
             document.getElementById("playerSelection").style.display = "none";
             document.getElementById("gameStatus").textContent = "Juego en progreso...";
+            document.getElementById("restartButton").style.display = "inline-block";  // Mostrar el botón de reiniciar
             generarTablero();
         }
 
@@ -180,7 +184,17 @@
             }
         }
 
+        // Función para reiniciar el juego
+        function reiniciarJuego() {
+            gameOver = false;
+            document.getElementById("gameStatus").textContent = "Juego en progreso...";
+            generarTablero();
+        }
+
+        // Eventos de los botones
         document.getElementById("startButton").addEventListener("click", iniciarJuego);
+        document.getElementById("restartButton").addEventListener("click", reiniciarJuego);
     </script>
 </body>
 </html>
+
