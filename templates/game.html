@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego Naval</title>
+    <style>
+        table {
+            width: 100%;
+            max-width: 600px;
+            margin: auto;
+            border-collapse: collapse;
+        }
+        td, th {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #ddd;
+            text-align: center;
+            vertical-align: middle;
+            cursor: pointer;
+        }
+        td.ship {
+            background-color: #000;
+        }
+        td.hit {
+            background-color: red;
+        }
+        td.miss {
+            background-color: lightblue;
+        }
+        td.empty {
+            background-color: #fff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1 class="text-center">Juego de Guerra Naval</h1>
+
+    {% if not game %}
+        <!-- Selección de Jugadores -->
+        <h2>Selecciona los Jugadores</h2>
+        <form method="POST" action="{{ url_for('start_game') }}">
+            <div class="form-group">
+                <label for="player1_id">Jugador 1</label>
+                <select class="form-control" id="player1_id" name="player1_id" required>
+                    <option value="" disabled selected>Seleccione un jugador</option>
+                    {% for player in players %}
+                        <option value="{{ player.id }}">{{ player.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="player2_id">Jugador 2</label>
+                <select class="form-control" id="player2_id" name="player2_id" required>
+                    <option value="" disabled selected>Seleccione un jugador</option>
+                    {% for player in players %}
+                        <option value="{{ player.id }}">{{ player.nombre }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary">Iniciar Juego</button>
+        </form>
+    {% else %}
+        <!-- Juego en curso -->
+        <h2>Juego en curso</h2>
+
+        <!-- Mostrar los jugadores actuales -->
+        <div>
+            <h4>Jugadores: {{ game.player1.name }} vs {{ game.player2.name }}</h4>
+            <p>Turno actual: {{ game.currentplayer.name }}</p>
+        </div>
+
+        <!-- Tablero de Jugadores -->
+        <h3>{{ game.currentplayer.name }} - Tu Tablero</h3>
+        <table id="game-board">
+            <thead>
+                <tr>
+                    <th>A</th><th>B</th><th>C</th><th>D</th><th>E</th><th>F</th><th>G</th><th>H</th><th>I</th><th>J</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in game.currentplayer.board %}
+                    <tr>
+                        {% for cell in row %}
+                            <td class="empty" data-row="{{ loop.index0 }}" data-col="{{ loop.index0 }}">{{ cell }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Mensajes de resultado -->
+        <h3>Realizar un Disparo</h3>
+        <p id="selected-position">Haz clic en una casilla para disparar</p>
+        <button id="fire-shot" class="btn btn-danger" style="display:none;">Disparar</button>
+
+        <form id="shoot-form" method="POST" action="{{ url_for('shoot') }}" style="display:none;">
+            <input type="hidden" name="position" id="position-input">
+            <button type="submit" style="display:none;"></button>
+        </form>
+
+        <!-- Mensajes de resultado -->
+        {% if game.game_over %}
+            <h4 class="mt-3">El juego ha terminado</h4>
+            <p>Ganador: {{ game.winner.name }}</p>
+            <a href="{{ url_for('index') }}" class="btn btn-success">Volver al Inicio</a>
+        {% endif %}
+    {% endif %}
+</div>
+
+<script>
+    // Variable para almacenar la posición seleccionada
+    let selectedCell = null;
+
+    // Detectar clics en las celdas del tablero
+    document.querySelectorAll('#game-board td').forEach(cell => {
+        cell.addEventListener('click', function() {
+            // Obtener las coordenadas de la celda seleccionada
+            const row = this.getAttribute('data-row');
+            const col = this.getAttribute('data-col');
+            const position = String.fromCharCode(65 + parseInt(col)) + (parseInt(row) + 1); // Convertir índices en formato de coordenada (ej: A1, B2, etc.)
+
+            // Marcar la casilla seleccionada visualmente
+            if (selectedCell) {
+                selectedCell.classList.remove('selected');
+            }
+            this.classList.add('selected');
+            selectedCell = this;
+
+            // Actualizar el texto que muestra la coordenada seleccionada
+            document.getElementById('selected-position').textContent = 'Seleccionaste la casilla: ' + position;
+
+            // Mostrar el botón de disparo
+            document.getElementById('fire-shot').style.display = 'inline-block';
+
+            // Establecer el valor de la coordenada seleccionada en el campo oculto del formulario
+            document.getElementById('position-input').value = position;
+        });
+    });
+
+    // Enviar el formulario cuando el jugador haga clic en "Disparar"
+    document.getElementById('fire-shot').addEventListener('click', function() {
+        document.getElementById('shoot-form').submit();
+    });
+</script>
+
+</body>
+</html>

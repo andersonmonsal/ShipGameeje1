@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batalla Naval</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 1200px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(10, 50px);
+            grid-template-rows: repeat(10, 50px);
+            gap: 2px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .cell {
+            width: 50px;
+            height: 50px;
+            background-color: #add8e6;
+            border: 1px solid #bbb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .cell.sunk {
+            background-color: red;
+        }
+
+        .cell.hit {
+            background-color: yellow;
+        }
+
+        .button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 20px;
+        }
+
+        .button:hover {
+            background-color: #0056b3;
+        }
+
+        .status {
+            margin-top: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+
+        .player-info {
+            margin-bottom: 20px;
+            font-size: 1.2em;
+        }
+
+        .input-container {
+            margin-bottom: 20px;
+        }
+
+        .input-container input {
+            padding: 10px;
+            font-size: 1em;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Juego de Batalla Naval</h1>
+        
+        <div id="playerSelection" class="input-container">
+            <label for="player1Name">Jugador 1:</label>
+            <input type="text" id="player1Name" placeholder="Ingrese nombre Jugador 1">
+            <label for="player2Name">Jugador 2:</label>
+            <input type="text" id="player2Name" placeholder="Ingrese nombre Jugador 2">
+            <button class="button" id="startButton">Iniciar Juego</button>
+        </div>
+
+        <div class="player-info" id="playerInfo">
+            <p><strong>Jugador 1:</strong> <span id="displayPlayer1Name">-</span></p>
+            <p><strong>Jugador 2:</strong> <span id="displayPlayer2Name">-</span></p>
+        </div>
+        
+        <div class="grid" id="playerBoard"></div>
+
+        <div id="gameStatus" class="status"></div>
+    </div>
+
+    <script>
+        let player1Name, player2Name, gameOver = false;
+
+        // Función para generar el tablero del jugador
+        function generarTablero() {
+            const board = document.getElementById("playerBoard");
+            board.innerHTML = "";
+            for (let i = 0; i < 100; i++) {
+                const cell = document.createElement("div");
+                cell.classList.add("cell");
+                cell.addEventListener("click", function () {
+                    if (!gameOver) disparar(i);
+                });
+                board.appendChild(cell);
+            }
+        }
+
+        // Función para iniciar el juego
+        function iniciarJuego() {
+            player1Name = document.getElementById("player1Name").value;
+            player2Name = document.getElementById("player2Name").value;
+            
+            if (!player1Name || !player2Name) {
+                alert("Por favor ingrese los nombres de los jugadores.");
+                return;
+            }
+
+            document.getElementById("displayPlayer1Name").textContent = player1Name;
+            document.getElementById("displayPlayer2Name").textContent = player2Name;
+            document.getElementById("playerSelection").style.display = "none";
+            document.getElementById("gameStatus").textContent = "Juego en progreso...";
+            generarTablero();
+        }
+
+        // Función para realizar un disparo en una celda
+        function disparar(cellIndex) {
+            const cells = document.querySelectorAll(".cell");
+            const cell = cells[cellIndex];
+
+            // Aquí deberías integrar la lógica de la aplicación para determinar si la celda es un acierto o no.
+            // Esta es solo una simulación.
+            const hit = Math.random() > 0.7; // 30% de probabilidad de que sea un "hit"
+
+            if (hit) {
+                cell.classList.add("hit");
+                document.getElementById("gameStatus").textContent = `¡Acierto, ${player1Name}!`;
+            } else {
+                cell.classList.add("sunk");
+                document.getElementById("gameStatus").textContent = `¡Fallaste, ${player1Name}!`;
+            }
+
+            // Simulación de fin del juego
+            if (Math.random() > 0.95) {
+                gameOver = true;
+                document.getElementById("gameStatus").textContent = `Game Over! ${player1Name} ha ganado.`;
+            }
+        }
+
+        document.getElementById("startButton").addEventListener("click", iniciarJuego);
+    </script>
+</body>
+</html>

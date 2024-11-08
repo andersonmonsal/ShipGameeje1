@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Naval Warfare - Players</title>
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+
+        nav {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        nav a {
+            margin: 0 15px;
+            font-size: 18px;
+            color: #007BFF;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            text-decoration: underline;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 1000px;
+            margin: 20px auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        section {
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        button {
+            padding: 8px 16px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #updateFormContainer {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        #updateFormContainer input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        footer {
+            text-align: center;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Naval Warfare - Players</h1>
+    </header>
+
+    <nav>
+        <a href="{{ url_for('index') }}">Home</a>
+        <a href="{{ url_for('players') }}">Players</a>
+        <a href="{{ url_for('game') }}">Game</a>
+    </nav>
+
+    <main>
+        <section>
+            <h2>List of Players</h2>
+            <ul>
+                {% for player in players %}
+                <li>
+                    <span>ID: {{ player.id }} - Name: {{ player.name }}</span>
+                    <div>
+                        <form action="{{ url_for('delete_player', player_id=player.id) }}" method="POST" style="display: inline;">
+                            <button type="submit">Delete</button>
+                        </form>
+                        <button onclick="showUpdateForm('{{ player.id }}', '{{ player.name }}')">Update</button>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            <!-- Formulario de actualización (inicialmente oculto) -->
+            <div id="updateFormContainer">
+                <h3>Update Player</h3>
+                <form id="updateForm" action="" method="POST">
+                    <input type="text" id="updateName" name="name" required>
+                    <button type="submit">Update</button>
+                    <button type="button" onclick="hideUpdateForm()">Cancel</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2024 Naval Warfare</p>
+    </footer>
+
+    <script>
+        function showUpdateForm(playerId, playerName) {
+            const container = document.getElementById('updateFormContainer');
+            const form = document.getElementById('updateForm');
+            const nameInput = document.getElementById('updateName');
+            
+            container.style.display = 'block';
+            form.action = "{{ url_for('update_player', player_id=0) }}".replace('0', playerId);
+            nameInput.value = playerName;
+        }
+
+        function hideUpdateForm() {
+            document.getElementById('updateFormContainer').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
